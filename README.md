@@ -33,12 +33,27 @@
 
       env\Scripts\activate
       pip install -r requirements.txt
-      cd ..
+      cd .. (To go folder 1 outside /educative-viewer)
+
       set course_dir=<path to course folder>
       set FLASK_APP=educative-viewer
       set authtoken=<any random keystring>
       set downloadtoken=<any random keystring>
-      
+      set GEMINI_API_KEY=YOUR_GEMINI_API_KEY
+
+##### OR (Using .env file)
+
+      create .env file **outside** educative-viewer folder
+
+Add the following variables
+
+```
+FLASK_APP=educative-viewer
+course_dir="D:\Courses\EDUCATIVE.IO Course"
+authtoken=<any random keystring>
+downloadtoken=<any random keystring>
+GEMINI_API_KEY=<YOUR_GEMINI_API_KEY>
+```
 
 #### > (For MacOS/Linux)
 
@@ -49,7 +64,6 @@
       export FLASK_APP=educative-viewer
       export authtoken=<any random keystring>
       export downloadtoken=<any random keystring>
-      
 
 ### Step 4: Start the viewer using the following commands:
 
