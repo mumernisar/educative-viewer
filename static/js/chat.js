@@ -57,9 +57,50 @@ async function fetchMessages() {
   }
 }
 
-// Call fetchMessages on page load
 document.addEventListener("DOMContentLoaded", fetchMessages);
 
+function getSelectionText() {
+  let text = "";
+  const activeEl = document.activeElement;
+  const activeElTagName = activeEl ? activeEl.tagName.toLowerCase() : null;
+  console.log(activeElTagName, "-active tag name ", activeEl);
+  if (activeElTagName === "textarea") {
+    // (activeElTagName === "input" &&
+    //   /^(?:url)$/i.test(activeEl.type) &&
+    //   // text|search|password|tel|
+    //   typeof activeEl.selectionStart === "number")
+    text = activeEl.value.slice(activeEl.selectionStart, activeEl.selectionEnd);
+  } else if (window.getSelection) {
+    text = window.getSelection().toString();
+  }
+  const input = document.getElementById("chat-input");
+
+  // Prepend the new content to the existing value
+  iv = input.value;
+  const regex = /--- QUOTED START ---[\s\S]*?--- QUOTED END ---/g;
+  input.value = input.value.replace(regex, "").trim();
+  text = "--- QUOTED START ---" + "\n" + text + "\n" + "--- QUOTED END ---";
+  input.value = text + "\n" + input.value;
+
+  console.log(text, "text from getSelectedText");
+  return text;
+}
+let selectionTimeout;
+let selectedText = "";
+let lastSelectedText = "";
+
+document.onselectionchange = function () {
+  clearTimeout(selectionTimeout);
+
+  selectionTimeout = setTimeout(() => {
+    const selection = window.getSelection().toString();
+    if (selection.length > 0 && lastSelectedText != selection) {
+      lastSelectedText = selection;
+      selectedText = getSelectionText();
+      document.getElementById("selected-text").value = selectedText;
+    }
+  }, 300);
+};
 // Send chat message function (no changes)
 async function sendChatMessage() {
   const input = document.getElementById("chat-input");
